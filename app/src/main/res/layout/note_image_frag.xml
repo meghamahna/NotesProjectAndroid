@@ -12,7 +12,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/camera"
         app:srcCompat="@drawable/camera" />
 
     <ImageButton
@@ -22,6 +22,15 @@
         android:layout_marginTop="100dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_camera_black_24dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        android:id="@+id/saveButton"/>
 
 
 </LinearLayout>

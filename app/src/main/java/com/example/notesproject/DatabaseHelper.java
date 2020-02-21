@@ -102,4 +102,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.delete(TABLE_NAME, ColumnName + "=?", new String[]{Value}) > 0 ;
 
     }
+
+    boolean deleteNote(int id){
+        SQLiteDatabase sqLiteDatabase  = getWritableDatabase();
+
+        //the delete method returns the  number of rows effected
+        return sqLiteDatabase.delete(TABLE_NAME, COLUMN_ID +"=?", new String[]{String.valueOf(id)}) > 0;
+    }
 }

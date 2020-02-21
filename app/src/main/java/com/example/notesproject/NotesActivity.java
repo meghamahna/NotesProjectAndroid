@@ -2,8 +2,13 @@ package com.example.notesproject;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,7 +37,7 @@ import java.util.List;
 
 public class NotesActivity extends AppCompatActivity {
 
-    ListView listView;
+//    ListView listView;
     ArrayList<NoteClass> notes;
     List<NoteClass> searchList = new ArrayList<>();
     List<String> search_list = new ArrayList<>();
@@ -41,6 +46,7 @@ public class NotesActivity extends AppCompatActivity {
     int temp = 0;
     private ArrayAdapter arrayAdapter;
     DatabaseHelper mDatabase;
+    SwipeMenuListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,7 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        listView = findViewById(R.id.notesList);
+        listView = findViewById(R.id.listView);
         notes = new ArrayList<>();
         mDatabase = new DatabaseHelper(this);
         searchText = findViewById(R.id.searchText);
@@ -68,6 +74,41 @@ public class NotesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+
+                SwipeMenuItem delete = new SwipeMenuItem(getApplicationContext());
+
+                delete.setIcon(R.drawable.ic_delete);
+                delete.setBackground(new ColorDrawable(Color.parseColor("#FFF71B05")));
+                delete.setWidth(250);
+                menu.addMenuItem(delete);
+            }
+        };
+        listView.setMenuCreator(swipeMenuCreator);
+
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
+                if (index == 0){
+
+
+                    NoteClass note = notes.get(position);
+                    int id = note.getId();
+                    if(mDatabase.deleteNote(id))
+                        notes.remove(position);
+//
+                    loadNotes();
+                }
+                return true;
+            }
+        });
+
+        listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

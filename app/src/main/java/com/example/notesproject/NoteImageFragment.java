@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +46,7 @@ public class NoteImageFragment extends Fragment {
     private File directory;
 
     ListView listView;
+    Button save;
 
     public NoteImageFragment(NoteClass notes) {
         this.notes = notes;
@@ -62,11 +64,14 @@ public class NoteImageFragment extends Fragment {
         ImageButton imageButton = view.findViewById(R.id.saveImageButton);
         listView = view.findViewById(R.id.listView);
         image = view.findViewById(R.id.imageview);
+        save = view.findViewById(R.id.saveButton);
+
         if(!checkCameraPermission()){
             requestCameraPermission();
         }
 
         if(notes != null){
+
             File sdCard = Environment.getExternalStorageDirectory();
             directory = new File(sdCard.getAbsolutePath() + "/NotesImages/" + notes.getId());
             if(!directory.exists())
@@ -132,6 +137,13 @@ public class NoteImageFragment extends Fragment {
 
             }
         });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Image Saved", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private File getPictureFile() throws IOException {
@@ -186,6 +198,7 @@ public class NoteImageFragment extends Fragment {
                     Bundle bundle = data.getExtras();
                     Bitmap bitmap = (Bitmap) bundle.get("data");
                     image.setImageBitmap(bitmap);
+                    save.setVisibility(View.VISIBLE);
                     break;
 
                 case GALLERY_REQUEST_CODE:
@@ -195,6 +208,7 @@ public class NoteImageFragment extends Fragment {
 
                         bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
                         image.setImageBitmap(bitmap);
+                        save.setVisibility(View.VISIBLE);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -206,6 +220,7 @@ public class NoteImageFragment extends Fragment {
 
         }
     }
+
 
 
 }
